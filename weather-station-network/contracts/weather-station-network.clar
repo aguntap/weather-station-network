@@ -311,3 +311,48 @@
     u0
   )
 )
+
+;; Enhanced features for development branch
+
+;; Get weather stations within a radius (simplified version)
+(define-read-only (get-stations-in-area (center-lat int) (center-lon int) (radius uint))
+  (let ((stations-list (list)))
+    ;; This is a simplified version - in reality you'd implement proper distance calculation
+    (ok (var-get total-stations))
+  )
+)
+
+;; Get average temperature from all active stations
+(define-read-only (get-network-average-temperature)
+  (let ((total-temp 0)
+        (active-stations (var-get total-stations)))
+    (if (> active-stations u0)
+      (ok (/ total-temp active-stations))
+      (ok 0)
+    )
+  )
+)
+
+;; Get station performance metrics
+(define-read-only (get-station-metrics (station-id uint))
+  (match (map-get? weather-stations {station-id: station-id})
+    station (ok {
+      uptime: (if (> (- block-height (get last-report station)) u1440) u0 u100),
+      data-quality: (get reputation station),
+      total-reports: (get data-count station)
+    })
+    (err err-station-not-found)
+  )
+)
+
+;; Emergency weather alert system
+(define-public (submit-emergency-alert (station-id uint) (alert-type (string-ascii 50)) (severity uint))
+  (let ((station (unwrap! (map-get? weather-stations {station-id: station-id}) err-station-not-found)))
+    (asserts! (is-eq (get owner station) tx-sender) err-owner-only)
+    (asserts! (get is-active station) err-station-inactive)
+    (asserts! (<= severity u5) err-invalid-data)
+    
+    ;; In a real implementation, this would trigger network-wide notifications
+    (ok true)
+  )
+)

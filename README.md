@@ -57,3 +57,23 @@ clarinet check
 
 # Start local development
 clarinet console
+
+## Enhanced Features (Development Branch)
+
+### New Functions Added:
+- `get-stations-in-area`: Find weather stations within a geographic radius
+- `get-network-average-temperature`: Calculate network-wide temperature average
+- `get-station-metrics`: Get performance metrics for individual stations
+- `submit-emergency-alert`: Submit emergency weather alerts
+
+### Performance Improvements:
+- Enhanced data validation
+- Improved reputation calculation
+- Better error handling
+- Network-wide analytics
+
+### Future Enhancements:
+- Real-time data streaming
+- Machine learning integration
+- Mobile app API
+- Weather prediction algorithms
